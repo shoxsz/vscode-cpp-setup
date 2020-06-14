@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Premake5Build",
+      "command": "premake5",
+      "args": [
+        "vs2019"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "process",
+      "label": "VSBuildDebug",
+      "command": "msbuild.exe",
+      "args": [
+        "build/ProjSetupWS.sln",
+        "/p:Configuration=Debug;Platform=x64",
+        "/fl",
+        "/flp:LogFile=build/msbuild.log"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": ["Premake5Build"]
+    },
+    {
+      "type": "process",
+      "label": "VSBuildRelease",
+      "command": "msbuild.exe",
+      "args": [
+        "build/ProjSetupWS.sln",
+        "/p:Configuration=Release;Platform=x64",
+        "/fl"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": ["Premake5Build"]
+    },
+    {
+      "type": "shell",
+      "label": "Run Release",
+      "command": "${workspaceFolder}/bin/Release/ProjSetup.exe",
+      "problemMatcher": ["$msCompile"],
+      "args": [],
+      "dependsOn": ["VSBuildRelease"]
+    }
+  ]
+}
